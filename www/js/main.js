@@ -1,5 +1,3 @@
-window.addEventListener("load", init)
-
 // get vue component
 function init () {
   console.log('hah')
@@ -10,3 +8,5 @@ function init () {
     }
   })
 }
+
+init()

@@ -14,23 +14,39 @@
   <script src="https://developer.api.autodesk.com/modelderivative/v2/viewers/viewer3D.min.js?v=v5.0"></script>
   <!-- vue framework files -->
   <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+  <!-- Firebase App is always required and must be first -->
+  <script src="https://www.gstatic.com/firebasejs/5.3.0/firebase-app.js"></script>
+  <!-- Add additional services that you want to use -->
+  <script src="https://www.gstatic.com/firebasejs/5.3.0/firebase-database.js"></script>
+  <!-- VueFire -->
+  <script src="https://unpkg.com/vuefire/dist/vuefire.js"></script>
   <!-- this project files -->
   <link href="css/main.css" rel="stylesheet" />
   <script src="js/ForgeTree.js"></script>
+  <script src="js/ForgePanel.js"></script>
   <script src="js/ForgeViewer.js"></script>
 </head>
 <body>
   <!-- Fixed navbar by Bootstrap: https://getbootstrap.com/examples/navbar-fixed-top/ -->
-  <div id="app">
-    <inav />
-  </div>
+  <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container-fluid">
+      <ul class="nav navbar-nav left">
+        <li>
+          <a href="#">Archissue
+          </a>
+        </li>
+      </ul>
+    </div>
+  </nav>
   <!-- End of navbar -->
   <div class="container-fluid fill">
     <div class="row fill">
-      <div class="col-sm-4 fill">
-        <div class="panel panel-default fill">
+
+      <div class="col-sm-3 fill">
+        <!-- bucket -->
+        <div class="panel panel-default fill" style="height: 300px">
           <div class="panel-heading" data-toggle="tooltip">
-            Buckets &amp; Objects
+            <strong>Buckets &amp; Objects</strong>
             <span id="refreshBuckets" class="glyphicon glyphicon-refresh" style="cursor: pointer"></span>
             <button class="btn btn-xs btn-info" style="float: right" id="showFormCreateBucket" data-toggle="modal" data-target="#createBucketModal">
               <span class="glyphicon glyphicon-folder-close"></span> New bucket
@@ -40,10 +56,25 @@
             tree here
           </div>
         </div>
+        <!-- issue -->
+        <div class="panel panel-default fill" style="height: 500px">
+          <div class="panel-heading" data-toggle="tooltip">
+            <strong>Issues</strong>
+            <button class="btn btn-xs btn-info" style="float: right" id="showFormCreateBucket" data-toggle="modal" data-target="#createIssue">
+              <span class="glyphicon glyphicon-plus"></span> New Issue
+            </button>
+          </div>
+          <div id="app">
+              <issues />
+          </div>
+        </div>
+
       </div>
-      <div class="col-sm-8 fill">
+      <!-- viewer -->
+      <div class="col-sm-9 fill">
         <div id="forgeViewer"></div>
       </div>
+
     </div>
   </div>
   <form id="uploadFile" method='post' enctype="multipart/form-data">
@@ -60,7 +91,7 @@
           <h4 class="modal-title" id="myModalLabel">Create new bucket</h4>
         </div>
         <div class="modal-body">
-          <input type="text" id="newBucketKey" class="form-control"> For demonstration purposes, objects (files) are 
+          <input type="text" id="newBucketKey" class="form-control"> For demonstration purposes, objects (files) are
           NOT automatically translated. After you upload, right click on
           the object and select "Translate".
         </div>
@@ -73,6 +104,7 @@
   </div>
 </body>
 <!-- run the entry js file -->
-<script src="components/nav.js"></script>
-<script src="main.js"></script>
+<script src="js/firebase_db.js"></script>
+<script src="components/issues.js"></script>
+<script src="js/main.js"></script>
 </html>
