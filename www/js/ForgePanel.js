@@ -1,8 +1,10 @@
 // *******************************************
 // Issue Panel
 // *******************************************
-function IssuePanel(viewer, container, id, title, options) {
+function IssuePanel(viewer, container, issue, options) {
   this.viewer = viewer;
+  let id = "Issue #" + issue.id
+  let title = id
   Autodesk.Viewing.UI.DockingPanel.call(this, container, id, title, options);
 
   // the style of the docking panel
@@ -17,26 +19,39 @@ function IssuePanel(viewer, container, id, title, options) {
   // this is where we should place the content of our panel
   var div = document.createElement('div');
   div.style.margin = '20px';
-  div.innerHTML = "<div>{{issues}}</div>";
+  div.innerHTML = '<div id="myissue"></div>';
   this.container.appendChild(div);
   // and may also append child elements...
+  // get vue component
+  console.log(issue)
+  new Vue({
+    el: '#myissue',
+    data: {active_issue:issue},
+    methods: {
+    },
+    template: `
+    <section>
+      {{active_issue.title}}
+    </section>
+    `
+  })
 
 }
 IssuePanel.prototype = Object.create(Autodesk.Viewing.UI.DockingPanel.prototype);
 IssuePanel.prototype.constructor = IssuePanel;
 
 // *******************************************
-// My Awesome Extension
+// My Issue Extension
 // *******************************************
-function MyAwesomeExtension(viewer, options) {
+function MyIssueExtension(viewer, options) {
   Autodesk.Viewing.Extension.call(this, viewer, options);
   this.panel = null;
 }
 
-MyAwesomeExtension.prototype = Object.create(Autodesk.Viewing.Extension.prototype);
-MyAwesomeExtension.prototype.constructor = MyAwesomeExtension;
+MyIssueExtension.prototype = Object.create(Autodesk.Viewing.Extension.prototype);
+MyIssueExtension.prototype.constructor = MyIssueExtension;
 
-MyAwesomeExtension.prototype.load = function () {
+MyIssueExtension.prototype.load = function () {
   if (this.viewer.toolbar) {
       // Toolbar is already available, create the UI
       this.createUI();
@@ -48,15 +63,28 @@ MyAwesomeExtension.prototype.load = function () {
   return true;
 };
 
-MyAwesomeExtension.prototype.onToolbarCreated = function () {
+MyIssueExtension.prototype.onToolbarCreated = function () {
   this.viewer.removeEventListener(av.TOOLBAR_CREATED_EVENT, this.onToolbarCreatedBinded);
   this.onToolbarCreatedBinded = null;
   this.createUI();
 };
 
-MyAwesomeExtension.prototype.createUI = function () {
+MyIssueExtension.prototype.createUI = function () {
   var viewer = this.viewer;
   var panel = this.panel;
+
+  window.addEventListener('onIssueData', e => {
+    // if null, create it
+    if (panel == null) {
+      panel = new IssuePanel(viewer, viewer.container, e.detail)
+      panel.setVisible(true)
+    } else {
+      panel.setVisible(false)
+      panel.uninitialize()
+      panel = new IssuePanel(viewer, viewer.container, e.detail)
+      panel.setVisible(true)
+    }
+  })
 
   // button to show the docking panel
   var toolbarButtonShowDockingPanel = new Autodesk.Viewing.UI.Button('showIssuePanel');
@@ -64,33 +92,33 @@ MyAwesomeExtension.prototype.createUI = function () {
       // if null, create it
       if (panel == null) {
           panel = new IssuePanel(viewer, viewer.container, 
-              'awesomeExtensionPanel', 'My Awesome Extension');
+              'IssueExtensionPanel', 'My Issue Extension');
       }
       // show/hide docking panel
       panel.setVisible(!panel.isVisible());
   };
-  // myAwesomeToolbarButton CSS class should be defined on your .css file
+  // myIssueToolbarButton CSS class should be defined on your .css file
   // you may include icons, below is a sample class:
   /* 
-  .myAwesomeToolbarButton {
-      background-image: url(/img/myAwesomeIcon.png);
+  .myIssueToolbarButton {
+      background-image: url(/img/myIssueIcon.png);
       background-size: 24px;
       background-repeat: no-repeat;
       background-position: center;
   }*/
-  toolbarButtonShowDockingPanel.addClass('myAwesomeToolbarButton');
-  toolbarButtonShowDockingPanel.setToolTip('My Awesome extension');
+  toolbarButtonShowDockingPanel.addClass('myIssueToolbarButton');
+  toolbarButtonShowDockingPanel.setToolTip('My Issue extension');
 
   // SubToolbar
-  this.subToolbar = new Autodesk.Viewing.UI.ControlGroup('MyAwesomeAppToolbar');
+  this.subToolbar = new Autodesk.Viewing.UI.ControlGroup('MyIssueAppToolbar');
   this.subToolbar.addControl(toolbarButtonShowDockingPanel);
 
   viewer.toolbar.addControl(this.subToolbar);
 };
 
-MyAwesomeExtension.prototype.unload = function () {
+MyIssueExtension.prototype.unload = function () {
   this.viewer.toolbar.removeControl(this.subToolbar);
   return true;
 };
 
-Autodesk.Viewing.theExtensionManager.registerExtension('MyAwesomeExtension', MyAwesomeExtension);
+Autodesk.Viewing.theExtensionManager.registerExtension('MyIssueExtension', MyIssueExtension);

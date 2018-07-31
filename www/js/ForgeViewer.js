@@ -8,7 +8,7 @@ function launchViewer(urn) {
   var documentId = 'urn:' + urn;
   Autodesk.Viewing.Initializer(options, function onInitialized() {
     viewerApp = new Autodesk.Viewing.ViewingApplication('forgeViewer');
-    viewerApp.registerViewer(viewerApp.k3D, Autodesk.Viewing.Private.GuiViewer3D, { extensions: ['MyAwesomeExtension'] });
+    viewerApp.registerViewer(viewerApp.k3D, Autodesk.Viewing.Private.GuiViewer3D, { extensions: ['MyIssueExtension'] });
     viewerApp.loadDocument(documentId, onDocumentLoadSuccess, onDocumentLoadFailure);
   });
 }
@@ -33,6 +33,8 @@ function onDocumentLoadFailure(viewerErrorCode) {
 
 function onItemLoadSuccess(viewer, item) {
   // item loaded, any custom action?
+  // window.addEventListener('onIssueData', e => console.log(e.detail))
+  // viewer.loadExtension("markup3d");
 }
 
 function onItemLoadFail(errorCode) {

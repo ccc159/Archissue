@@ -42,11 +42,11 @@
   <div class="container-fluid fill">
     <div class="row fill">
 
-      <div class="col-sm-3 fill">
+      <div class="col-sm-2 fill">
         <!-- bucket -->
         <div class="panel panel-default fill" style="height: 300px">
           <div class="panel-heading" data-toggle="tooltip">
-            <strong>Buckets &amp; Objects</strong>
+            <strong title="Buckets &amp; Objects">Projects</strong>
             <span id="refreshBuckets" class="glyphicon glyphicon-refresh" style="cursor: pointer"></span>
             <button class="btn btn-xs btn-info" style="float: right" id="showFormCreateBucket" data-toggle="modal" data-target="#createBucketModal">
               <span class="glyphicon glyphicon-folder-close"></span> New bucket
@@ -64,14 +64,13 @@
               <span class="glyphicon glyphicon-plus"></span> New Issue
             </button>
           </div>
-          <div id="app">
-              <issues />
+          <div id="issues">
           </div>
         </div>
 
       </div>
       <!-- viewer -->
-      <div class="col-sm-9 fill">
+      <div class="col-sm-10 fill">
         <div id="forgeViewer"></div>
       </div>
 
