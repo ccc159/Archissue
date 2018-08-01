@@ -3,11 +3,11 @@ new Vue({
   el: '#issues',
   firebase: {
     issues: {
-      source: db.ref('issues'),
+      source: db.ref('issues').orderByChild("created_at"),
       asObject: false
     },
     notes: {
-      source: db.ref('notes'),
+      source: db.ref('notes').orderByChild("created_at"),
       asObject: false
     }
   },

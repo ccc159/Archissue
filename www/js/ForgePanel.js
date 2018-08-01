@@ -14,7 +14,7 @@ function IssuePanel(viewer, container, issue, options) {
   this.container.style.top = "10px";
   this.container.style.left = "10px";
   this.container.style.width = "350px";
-  this.container.style.height = "400px";
+  this.container.style.height = "700px";
   this.container.style.resize = "auto";
   this.container.style.minHeight = "400px";
   this.container.style.minWidth = "350px";
@@ -52,8 +52,13 @@ function IssuePanel(viewer, container, issue, options) {
       <p style="font-size: 12px;">{{active_issue.description}}</p>
       <!-- comments -->
       <hr>
-      <div v-for="note in active_issue.comments" :key="note.id">
-        <comment :note="note"/>
+      <div style="max-height: 400px; overflow: auto">
+        <div v-for="note in active_issue.comments" :key="note.id">
+          <comment :note="note"/>
+        </div>
+      </div>
+      <div style="font-size: 12px; position: absolute; bottom: 6px; background: #222;">
+        <newcomment :issue="active_issue"/>
       </div>
     </section>
     `
