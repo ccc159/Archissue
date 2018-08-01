@@ -23,7 +23,7 @@ new Vue({
     <ul class="list-group list-group-flush">
       <button @click="sendIssue(issue)" type="button" class="list-group-item list-group-item-action" v-for="issue in issues" :key="issue.id" style="padding: 5px 12px">
         {{issue.title}}
-        <span style="float: right" :class="{'label': true, 'label-danger':issue.state === 'closed', 'label-success': issue.state === 'open','label-pill':true}">{{issue.state}}</span>
+        <span style="float: right position: relative; top: -1px;" :class="{'label': true, 'label-danger':issue.state === 'closed', 'label-success': issue.state === 'open','label-pill':true}">{{issue.state}}</span>
       </button>
     </ul>
   </section>

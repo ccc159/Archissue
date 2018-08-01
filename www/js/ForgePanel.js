@@ -15,11 +15,13 @@ function IssuePanel(viewer, container, issue, options) {
   this.container.style.width = "auto";
   this.container.style.height = "auto";
   this.container.style.resize = "auto";
+  this.container.style.minHeight = "400px";
+  this.container.style.minWidth = "350px";
 
   // this is where we should place the content of our panel
   var div = document.createElement('div');
-  div.style.margin = '20px';
-  div.innerHTML = '<div id="myissue"></div>';
+  div.style.margin = '15px';
+  div.innerHTML = '<div id="myissue" style="min-width: 150px; min-height: 200px;"></div>';
   this.container.appendChild(div);
   // and may also append child elements...
   // get vue component
@@ -28,10 +30,29 @@ function IssuePanel(viewer, container, issue, options) {
     el: '#myissue',
     data: {active_issue:issue},
     methods: {
+
     },
     template: `
-    <section>
-      {{active_issue.title}}
+    <section v-if="Object.keys(active_issue).length > 0">
+      <!-- state -->
+      <div v-if="active_issue.state === 'open'" style="font-size: 12px;">
+        <label class="label label-success label-pill" style="position: relative; top: -1px; margin-right: 3px;">Open</label>
+        Opened {{timeago().format(active_issue.created_at)}} by
+        <strong>{{active_issue.author}}</strong>
+      </div>
+      <div v-if="active_issue.state === 'closed'" style="font-size: 12px;">
+        <label class="label label-danger label-pill" style="position: relative; top: -1px; margin-right: 3px;">Closed</label>
+        Closed {{timeago().format(active_issue.created_at)}} by
+        <strong>{{active_issue.author}}</strong>
+      </div>
+      <hr>
+      <!-- title -->
+      <h4>{{ active_issue.title }}</h4>
+      <!-- description -->
+      <p style="font-size: 12px;">{{active_issue.description}}</p>
+      <!-- comments -->
+      <hr>
+
     </section>
     `
   })

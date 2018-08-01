@@ -22,3 +22,9 @@ body {
 #forgeViewer {
   width: 100%;
 }
+
+hr {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  border-top-color: #777;
+}
