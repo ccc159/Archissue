@@ -2,18 +2,19 @@
 // Issue Panel
 // *******************************************
 function IssuePanel(viewer, container, issue, options) {
-  this.viewer = viewer;
+  this.viewer = viewer
+  this.type = "IssuePanel"
   let id = "Issue #" + issue.id
   let title = id
-  Autodesk.Viewing.UI.DockingPanel.call(this, container, id, title, options);
+  Autodesk.Viewing.UI.DockingPanel.call(this, container, id, title, options)
 
   // the style of the docking panel
   // use this built-in style to support Themes on Viewer 4+
   this.container.classList.add('docking-panel-container-solid-color-a');
   this.container.style.top = "10px";
   this.container.style.left = "10px";
-  this.container.style.width = "350";
-  this.container.style.height = "400";
+  this.container.style.width = "350px";
+  this.container.style.height = "400px";
   this.container.style.resize = "auto";
   this.container.style.minHeight = "400px";
   this.container.style.minWidth = "350px";
@@ -21,11 +22,10 @@ function IssuePanel(viewer, container, issue, options) {
   // this is where we should place the content of our panel
   var div = document.createElement('div');
   div.style.margin = '15px';
-  div.innerHTML = '<div id="myissue" style="min-width: 150px; min-height: 200px;"></div>';
+  div.innerHTML = '<div id="myissue"></div>';
   this.container.appendChild(div);
   // and may also append child elements...
   // get vue component
-  console.log(issue)
   new Vue({
     el: '#myissue',
     data: {active_issue:issue},
@@ -64,6 +64,99 @@ IssuePanel.prototype = Object.create(Autodesk.Viewing.UI.DockingPanel.prototype)
 IssuePanel.prototype.constructor = IssuePanel;
 
 // *******************************************
+// NewIssue Panel
+// *******************************************
+function NewIssuePanel(viewer, container, options) {
+  this.viewer = viewer;
+  let id = "New Issue"
+  let title = id
+  this.type = "NewIssuePanel"
+  Autodesk.Viewing.UI.DockingPanel.call(this, container, id, title, options);
+
+  // the style of the docking panel
+  // use this built-in style to support Themes on Viewer 4+
+  this.container.classList.add('docking-panel-container-solid-color-a');
+  this.container.style.top = "10px";
+  this.container.style.left = "10px";
+  this.container.style.width = "350px";
+  this.container.style.height = "450px";
+  this.container.style.resize = "auto";
+  this.container.style.minHeight = "450px";
+  this.container.style.minWidth = "350px";
+
+  // this is where we should place the content of our panel
+  var div = document.createElement('div');
+  div.style.margin = '15px';
+  div.innerHTML = '<div id="mynewissue"></div>';
+  this.container.appendChild(div);
+  // and may also append child elements...
+  // get vue component
+  new Vue({
+    el: '#mynewissue',
+    data: {
+      title: "",
+      description: "",
+      saveView: false
+    },
+    methods: {
+      submitNewIssue () {
+        let id = IssueID()
+        // hard coded author and project_id
+        let newissue = {
+          id: id,
+          project_id: 1,
+          author: "Chen",
+          created_at: new Date().toISOString(),
+          description: this.description,
+          state: "open",
+          title: this.title
+        }
+        if (this.saveView) {
+          let camera = {viewport: viewerApp.myCurrentViewer.viewerState.getState().viewport}
+          newissue.camera = camera
+        }
+        this.SendToDataBase(newissue)
+      },
+      SendToDataBase (newissue) {
+        db.ref('issues/' + newissue.id).set(newissue)
+          .then(() => {
+            window.dispatchEvent(new Event('closeNewIssuePanel'))
+          })
+      }
+    },
+    template: `
+    <section>
+      <!-- title -->
+      <form>
+        <div class="form-group">
+          <label for="newIssueTitle">Title</label>
+          <input v-model="title" type="email" class="form-control form-control-sm" id="newIssueTitle" placeholder="title" style="width: 300px;">
+        </div>
+        <div class="form-group">
+          <label for="newIssueDescription">Description</label>
+          <textarea v-model="description" class="form-control" id="newIssueDescription" rows="6" placeholder="write a comment here" style="width: 300px;"></textarea>
+        </div>
+        <div class="form-group">
+          <div class="form-check">
+            <input v-model="saveView" class="form-check-input" type="checkbox" id="autoSizingCheck2">
+            <label class="form-check-label" for="autoSizingCheck2">
+              Save Current View
+            </label>
+          </div>
+        </div>
+        <div class="form-group">
+          <button type="button" class="btn btn-info btn-sm" @click="submitNewIssue">Submit Issue</button>
+        </div>
+      </form>
+    </section>
+    `
+  })
+
+}
+NewIssuePanel.prototype = Object.create(Autodesk.Viewing.UI.DockingPanel.prototype);
+NewIssuePanel.prototype.constructor = NewIssuePanel;
+
+// *******************************************
 // My Issue Extension
 // *******************************************
 function MyIssueExtension(viewer, options) {
@@ -96,9 +189,10 @@ MyIssueExtension.prototype.createUI = function () {
   var viewer = this.viewer;
   var panel = this.panel;
 
+  // swith between different issues
   window.addEventListener('onIssueData', e => {
     // if null, create it
-    if (panel == null) {
+    if ( panel == null || panel.type === "NewIssuePanel") {
       panel = new IssuePanel(viewer, viewer.container, e.detail)
       panel.setVisible(true)
     } else {
@@ -107,8 +201,34 @@ MyIssueExtension.prototype.createUI = function () {
       panel = new IssuePanel(viewer, viewer.container, e.detail)
       panel.setVisible(true)
     }
+
     if (e.detail.camera) {
       viewer.restoreState(e.detail.camera);
+    }
+  })
+
+  // create a new issue
+  window.addEventListener('onNewIssue', () => {
+    // if null, create it
+    if (panel == null) {
+      panel = new NewIssuePanel(viewer, viewer.container)
+      panel.setVisible(true)
+    } else {
+      panel.setVisible(false)
+      panel.uninitialize()
+      panel = new NewIssuePanel(viewer, viewer.container)
+      panel.setVisible(true)
+    }
+  })
+
+  // close issue panel
+  window.addEventListener('closeNewIssuePanel', () => {
+    // if null, create it
+    if (panel != null) {
+      if (panel.type === "NewIssuePanel") {
+        panel.setVisible(false)
+        panel.uninitialize()
+      }
     }
   })
 
@@ -117,7 +237,7 @@ MyIssueExtension.prototype.createUI = function () {
   toolbarButtonShowDockingPanel.onClick = function (e) {
       // if null, create it
       if (panel == null) {
-          panel = new IssuePanel(viewer, viewer.container, 
+          panel = new IssuePanel(viewer, viewer.container,
               'IssueExtensionPanel', 'My Issue Extension');
       }
       // show/hide docking panel

@@ -50,8 +50,9 @@
           <div class="panel-heading" data-toggle="tooltip">
             <strong title="Buckets &amp; Objects">Projects</strong>
             <span id="refreshBuckets" class="glyphicon glyphicon-refresh" style="cursor: pointer"></span>
-            <button class="btn btn-xs btn-info" style="float: right" id="showFormCreateBucket" data-toggle="modal" data-target="#createBucketModal">
-              <span class="glyphicon glyphicon-folder-close"></span> New bucket
+            <button type="button" class="btn btn-xs btn-info" style="float: right" id="showFormCreateBucket" data-toggle="modal" data-target="#createBucketModal">
+              <span class="glyphicon glyphicon-folder-close"></span>
+              <span>New Project</span>
             </button>
           </div>
           <div id="appBuckets">
@@ -59,17 +60,7 @@
           </div>
         </div>
         <!-- issue -->
-        <div class="panel panel-default fill" style="height: 500px">
-          <div class="panel-heading" data-toggle="tooltip">
-            <strong>Issues</strong>
-            <button class="btn btn-xs btn-info" style="float: right" id="showFormCreateBucket" data-toggle="modal" data-target="#createIssue">
-              <span class="glyphicon glyphicon-plus"></span> New Issue
-            </button>
-          </div>
-          <div id="issues">
-          </div>
-        </div>
-
+        <div id="issues"></div>
       </div>
       <!-- viewer -->
       <div class="col-sm-10 fill">
