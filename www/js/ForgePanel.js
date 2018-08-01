@@ -12,8 +12,8 @@ function IssuePanel(viewer, container, issue, options) {
   this.container.classList.add('docking-panel-container-solid-color-a');
   this.container.style.top = "10px";
   this.container.style.left = "10px";
-  this.container.style.width = "auto";
-  this.container.style.height = "auto";
+  this.container.style.width = "350";
+  this.container.style.height = "400";
   this.container.style.resize = "auto";
   this.container.style.minHeight = "400px";
   this.container.style.minWidth = "350px";
@@ -106,6 +106,9 @@ MyIssueExtension.prototype.createUI = function () {
       panel.uninitialize()
       panel = new IssuePanel(viewer, viewer.container, e.detail)
       panel.setVisible(true)
+    }
+    if (e.detail.camera) {
+      viewer.restoreState(e.detail.camera);
     }
   })
 
