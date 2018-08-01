@@ -52,7 +52,9 @@ function IssuePanel(viewer, container, issue, options) {
       <p style="font-size: 12px;">{{active_issue.description}}</p>
       <!-- comments -->
       <hr>
-
+      <div v-for="note in active_issue.comments" :key="note.id">
+        <comment :note="note"/>
+      </div>
     </section>
     `
   })
