@@ -32,10 +32,22 @@
   <!-- Fixed navbar by Bootstrap: https://getbootstrap.com/examples/navbar-fixed-top/ -->
   <nav class="navbar navbar-default navbar-fixed-top">
     <div class="container-fluid">
-      <ul class="nav navbar-nav left">
+      <ul class="nav navbar-nav navbar-left">
         <li>
-          <a href="#">Archissue
+          <a class="navbar-brand" href="#">Archissue
           </a>
+        </li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+          <a class="dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Author
+          </a>
+          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <p style="cursor: pointer; padding-right: 14px; float: right;" class="dropdown-item" href="#" onclick="changeAuthorName('Chen')">Chen</p>
+            <p style="cursor: pointer; padding-right: 14px; float: right;" class="dropdown-item" href="#" onclick="changeAuthorName('Martin')">Martin</p>
+            <p style="cursor: pointer; padding-right: 14px; float: right;" class="dropdown-item" href="#" onclick="changeAuthorName('Kai')">Kai</p>
+          </div>
         </li>
       </ul>
     </div>

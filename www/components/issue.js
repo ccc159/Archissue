@@ -54,7 +54,7 @@ function VueNewIssuePanel () {
         let newissue = {
           id: id,
           project_id: 1,
-          author: "Chen",
+          author: author_name,
           created_at: new Date().toISOString(),
           description: this.description,
           state: "open",

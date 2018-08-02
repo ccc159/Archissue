@@ -141,7 +141,7 @@ MyIssueExtension.prototype.createUI = function () {
   })
 
   // button to show the docking panel
-  var toolbarButtonShowDockingPanel = new Autodesk.Viewing.UI.Button('showIssuePanel');
+  var toolbarButtonShowDockingPanel = new Autodesk.Viewing.UI.Button('Export Issues');
   toolbarButtonShowDockingPanel.onClick = function (e) {
       // if null, create it
       if (panel == null) {
@@ -151,15 +151,7 @@ MyIssueExtension.prototype.createUI = function () {
       // show/hide docking panel
       panel.setVisible(!panel.isVisible());
   };
-  // myIssueToolbarButton CSS class should be defined on your .css file
-  // you may include icons, below is a sample class:
-  /* 
-  .myIssueToolbarButton {
-      background-image: url(/img/myIssueIcon.png);
-      background-size: 24px;
-      background-repeat: no-repeat;
-      background-position: center;
-  }*/
+
   toolbarButtonShowDockingPanel.addClass('myIssueToolbarButton');
   toolbarButtonShowDockingPanel.setToolTip('My Issue extension');
 

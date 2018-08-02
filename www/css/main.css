@@ -28,3 +28,10 @@ hr {
   margin-bottom: 10px;
   border-top-color: #777;
 }
+
+.myIssueToolbarButton {
+  background-image: url(../assets/export.png);
+  background-size: 24px;
+  background-repeat: no-repeat;
+  background-position: center;
+}

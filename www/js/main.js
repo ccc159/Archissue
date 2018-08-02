@@ -12,3 +12,13 @@ var CommentID = function () {
   // after the decimal.
   return 'c' + Math.random().toString(36).substr(2, 9);
 };
+
+
+// deal with author name
+var author_name = "Chen"
+document.getElementById("dropdownMenuButton").innerHTML = author_name
+
+function changeAuthorName (name) {
+  author_name = name
+  document.getElementById("dropdownMenuButton").innerHTML = name
+}

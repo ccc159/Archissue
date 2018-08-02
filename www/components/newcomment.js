@@ -13,7 +13,7 @@ Vue.component('newcomment', {
       let comment = {
         id: id,
         issue_id: this.issue.id,
-        author: "Chen",
+        author: author_name,
         body: this.comment_content,
         created_at: new Date().toISOString()
       }
