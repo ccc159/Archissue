@@ -26,13 +26,38 @@ Vue.component('newcomment', {
         this.comment_content = ""
         this.isCommenting = false
       })
+    },
+    SendIssueToDataBase (newissue) {
+      db.ref('issues/' + newissue.id).set(newissue)
+        .then(() => {
+          window.dispatchEvent(new CustomEvent('onIssueData', {'detail': this.issue}))
+        })
+    },
+    closeIssue () {
+      this.issue.state = "closed"
+      this.issue.updated_at = new Date().toISOString()
+      let newissue = Object.assign({}, this.issue)
+      delete newissue[".key"]
+      delete newissue["comments"]
+      this.SendIssueToDataBase(newissue)
+    },
+    openIssue () {
+      this.issue.state = "open"
+      this.issue.updated_at = new Date().toISOString()
+      let newissue = Object.assign({}, this.issue)
+      delete newissue[".key"]
+      delete newissue["comments"]
+      this.SendIssueToDataBase(newissue)
     }
   },
   template: `
   <section>
     <div v-if="!isCommenting" style="cursor: text; position: relative; top: -20px; left: 5px;">
-      <span class="glyphicon glyphicon-plus" style="opacity: 0.6;"></span>
-      <span style="width: 100%; text-align: center; color: #bdbdbd;" @click="isCommenting=true">Add a comment here.</span>
+      <span v-if="issue.state === 'open'" class="glyphicon glyphicon-plus" style="opacity: 0.6;"></span>
+      <span v-if="issue.state === 'open'" style="width: 100%; text-align: center; color: #bdbdbd;" @click="isCommenting=true">Add a comment here.</span>
+      <span v-if="issue.state === 'closed'" style="width: 100%; text-align: center; color: #bdbdbd;">Issue is closed.</span>
+      <span v-if="issue.state === 'open'" class="text-info" style="float: right; cursor: pointer; padding-left: 100px;" @click="closeIssue">close issue</span>
+      <span v-if="issue.state === 'closed'" class="text-info" style="float: right; cursor: pointer; padding-left: 100px;" @click="openIssue">reopen issue</span>
     </div>
     <div v-else>
       <form>
