@@ -12,9 +12,8 @@ new Vue({
     }
   },
   methods: {
-    sendIssue (issue) {
-      issue.comments = this.notes.filter(note => note.issue_id === issue.id)
-      window.dispatchEvent(new CustomEvent('onIssueData', {'detail': issue}))
+    showExportModal () {
+      window.dispatchEvent(new CustomEvent('onShowExport', {'detail': this.issues}))
     }
   },
   template: `
@@ -32,6 +31,9 @@ new Vue({
           <span style="float: right; position: relative; top: -1px;" :class="{'label': true, 'label-danger':issue.state === 'closed', 'label-success': issue.state === 'open','label-pill':true}">{{issue.state}}</span>
         </button>
       </ul>
+      <div style="display: flex; justify-content: center;">
+      <button type="button" @click="showExportModal" class="btn btn-xs btn-primary" style="position: absolute; bottom: 35px;">Export Issues</button>
+      </div>
     </div>
 
   `
