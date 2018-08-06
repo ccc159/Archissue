@@ -84,6 +84,7 @@ MyIssueExtension.prototype.load = function () {
       this.onToolbarCreatedBinded = this.onToolbarCreated.bind(this);
       this.viewer.addEventListener(av.TOOLBAR_CREATED_EVENT, this.onToolbarCreatedBinded);
   }
+  this.viewer.addEventListener(av.SELECTION_CHANGED_EVENT, this.onSelectionChanged.bind(this));
   return true;
 };
 
@@ -91,6 +92,10 @@ MyIssueExtension.prototype.onToolbarCreated = function () {
   this.viewer.removeEventListener(av.TOOLBAR_CREATED_EVENT, this.onToolbarCreatedBinded);
   this.onToolbarCreatedBinded = null;
   this.createUI();
+};
+
+MyIssueExtension.prototype.onSelectionChanged = function () {
+  this.viewer.setSelectionColor(new THREE.Color(0x0000FF), Autodesk.Viewing.SelectionMode.MIXED);
 };
 
 MyIssueExtension.prototype.createUI = function () {
@@ -109,9 +114,15 @@ MyIssueExtension.prototype.createUI = function () {
       panel = new IssuePanel(viewer, viewer.container, e.detail)
       panel.setVisible(true)
     }
-
+    // change camera view
     if (e.detail.camera) {
       viewer.restoreState(e.detail.camera);
+    }
+    // change selected model
+    viewer.clearSelection()
+    if (e.detail.related_components) {
+      viewer.select(e.detail.related_components);
+      viewer.setSelectionColor(new THREE.Color(0xFF0000), Autodesk.Viewing.SelectionMode.MIXED);
     }
   })
 

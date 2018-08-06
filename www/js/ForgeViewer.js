@@ -35,6 +35,7 @@ function onItemLoadSuccess(viewer, item) {
   // item loaded, any custom action?
   // window.addEventListener('onIssueData', e => console.log(e.detail))
   // viewer.loadExtension("markup3d");
+  viewerApp.myCurrentViewer.setSelectionColor(new THREE.Color(0x0000FF), Autodesk.Viewing.SelectionMode.MIXED);
 }
 
 function onItemLoadFail(errorCode) {

@@ -45,7 +45,8 @@ function VueNewIssuePanel () {
     data: {
       title: "",
       description: "",
-      saveView: false
+      saveView: false,
+      saveComponents: false
     },
     methods: {
       submitNewIssue () {
@@ -63,6 +64,10 @@ function VueNewIssuePanel () {
         if (this.saveView) {
           let camera = {viewport: viewerApp.myCurrentViewer.viewerState.getState().viewport}
           newissue.camera = camera
+        }
+        if (this.saveComponents) {
+          let selection = viewerApp.myCurrentViewer.getSelection()
+          newissue.related_components = selection
         }
         this.SendToDataBase(newissue)
       },
@@ -90,6 +95,14 @@ function VueNewIssuePanel () {
             <input v-model="saveView" class="form-check-input" type="checkbox" id="autoSizingCheck2">
             <label class="form-check-label" for="autoSizingCheck2">
               Save Current View
+            </label>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="form-check">
+            <input v-model="saveComponents" class="form-check-input" type="checkbox" id="autoSizingCheck3">
+            <label class="form-check-label" for="autoSizingCheck3">
+              Mark Selected Component(s)
             </label>
           </div>
         </div>
