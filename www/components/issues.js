@@ -14,6 +14,11 @@ new Vue({
   methods: {
     showExportModal () {
       window.dispatchEvent(new CustomEvent('onShowExport', {'detail': this.issues}))
+    },
+    sendIssue (issue) {
+      issue.comments = this.notes.filter(note => note.issue_id === issue.id)
+      window.dispatchEvent(new CustomEvent('onIssueData', {'detail': issue}))
+      window.dispatchEvent(new Event('onDrawMarkUp'))
     }
   },
   template: `
