@@ -64,7 +64,11 @@ $(document).ready(function () {
     }).on('loaded.jstree', function () {
       $('#appBuckets').jstree('open_all');
     }).bind("activate_node.jstree", function (evt, data) {
+      if (data != null && data.node != null && data.node.type == 'bucket') {
+        window.dispatchEvent(new CustomEvent('onProjectChanged', {'detail': data.node.id}))
+      }
       if (data != null && data.node != null && data.node.type == 'object') {
+        window.dispatchEvent(new CustomEvent('onProjectChanged', {'detail': data.node.parent}))
         $("#forgeViewer").empty();
         var urn = data.node.id;
         getForgeToken(function (access_token) {
